@@ -12,21 +12,33 @@ namespace VideoRentalStore
         private readonly Customer customer = new Customer();
         private bool exit;
         public bool Exit => exit;
+
+        public Inventory Store => store;
+        public Inventory Backpack => backpack;
+        public Customer Customer => customer;
+
         private const int AMOUNT_OF_COMMANDS = 12; // Used for assertion
+
+
+        /// <param name="input">Simulate user input. If the parameter is null, then Console.ReadLine() is called.</param>
         public void Interact(string input = null)
         {
             Console.Write("# ");
             string userInput = input == null ? Console.ReadLine() : input;
             Action<string> action = commands.GetValueOrDefault(userInput.Split(' ')[0]);
 
-            if (userInput != string.Empty && action == null)
+
+            // Handle this in case if give string is empty...
+            if (!string.IsNullOrEmpty(userInput) && action == null)
                 Console.WriteLine("Unknown command");
-            else if (userInput != string.Empty)
+            else if (!string.IsNullOrEmpty(userInput))
                 action(userInput);
         }
-
-
+        /// <summary>
+        /// string commandlets mapped to methods.
+        /// </summary>
         private readonly Dictionary<string, Action<string>> commands;
+
         public CLI()
         {
             commands = new()
@@ -35,7 +47,12 @@ namespace VideoRentalStore
                 { "?", (_) => RentalUtils.PrintHelp() },
                 { "store", (_) => store.PrintFilms(false) },
                 { "backpack", (_) => backpack.PrintFilms(true) },
-                { "clear", (_) => Console.Clear() },
+                { "clear", (_) => 
+                {
+                if (!Console.IsOutputRedirected)
+                        Console.Clear();
+
+                } },
                 { "sleep", (_) => backpack.DayPass() },
                 { "add", (input) => RentalUtils.RentFilm(input, false, store, backpack, customer) },
                 { "bonuspay", (input) => RentalUtils.RentFilm(input, true, store, backpack, customer) },

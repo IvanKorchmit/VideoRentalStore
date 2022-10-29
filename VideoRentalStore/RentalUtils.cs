@@ -68,7 +68,7 @@ namespace VideoRentalStore
                 {
                     splitted[i] = splitted[i].Trim();
                 }
-                if (!isPaidWithBonus && splitted.Length < 3)
+                if (splitted.Length < (!isPaidWithBonus ? 3 : 2))
                 {
                     Console.WriteLine("Error! Command is used wrong");
                     return (null, 0, false);

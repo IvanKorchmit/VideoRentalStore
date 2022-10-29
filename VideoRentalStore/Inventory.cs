@@ -4,7 +4,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 namespace VideoRentalStore
 {
-    sealed partial class Inventory
+    public sealed partial class Inventory
     {
         // Fields
         private List<Film> rentedFilms = new List<Film>();
