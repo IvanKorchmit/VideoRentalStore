@@ -5,29 +5,12 @@ namespace VideoRentalStore
 
     public partial class Film
     {
-        #region Constants
-        private const int PREMIUM_PRICE = 4;
-        private const int BASIC_PRICE = 3;
-
-        private const int OLD_FILM_DAYS = 5;
-        private const int REGULAR_FILM_DAYS = 3;
-        #endregion
-        #region Properties
         public string Name { get; private set; }
         public int Price
         {
             get
             {
-                return Rental switch
-                {
-                    RentalType.RegularRental => DaysRent <= REGULAR_FILM_DAYS ? BASIC_PRICE : DaysRent - REGULAR_FILM_DAYS + DaysRent + DaysRent - REGULAR_FILM_DAYS,
-
-                    RentalType.NewRelease => PREMIUM_PRICE * DaysRent,
-
-                    RentalType.OldFilm => DaysRent <= OLD_FILM_DAYS ? BASIC_PRICE : DaysRent - OLD_FILM_DAYS + DaysRent,
-                    // In case of expanding enum types... We will get explicitly thrown exception. Explicit > Implicit
-                    _ => throw new ArgumentException($"Unknown enum {Rental}"),
-                };
+                return Rental.CalculatePrice(DaysRent);
             }
         }
         public int DaysRent { get; set; }
@@ -54,32 +37,20 @@ namespace VideoRentalStore
                 }
             }
         }
-        public void ResetDaysRent()
-        {
-            DaysRent = 0;
-            daysHeld = 0;
-        }
-        public RentalType Rental { get; set; }
-        #endregion
-        private readonly Dictionary<RentalType, string> rentalToString;
+        public RentalBase Rental { get; set; }
+
+
         public Film(string name,
-                    RentalType filmType = RentalType.OldFilm,
+                    RentalBase filmType = null,
                     int days = 0)
         {
             // Map RentalType enum to human readable representation
-            rentalToString = new Dictionary<RentalType, string>()
-            {
-                { RentalType.NewRelease, "New Release"},
-                { RentalType.OldFilm, "Old film"},
-                { RentalType.RegularRental, "Regular rental"}
-            };
 
             Rental = filmType;
             oldDays = days;
             Name = name;
             DaysRent = days;
         }
-        #region Operator Overloading
         public static bool operator ==(Film a, Film b)
         {
             return (a?.Name ?? null) == (b?.Name ?? null);
@@ -87,23 +58,21 @@ namespace VideoRentalStore
 
         public static bool operator !=(Film a, Film b)
         {
-            return a.Name != b.Name;
+            return !(a == b);
         }
-        #endregion
 
 
-        #region Overrides
         public override string ToString()
         {
             if (DaysRent == 0)
             {
-                return $"{Name}({rentalToString[Rental]})";
+                return $"{Name}({Rental})";
             }
             if (!isLate)
             {
-                return $"{Name}({rentalToString[Rental]}) {DaysRent} days {Price} EUR";
+                return $"{Name}({Rental}) {DaysRent} days {Price} EUR";
             }
-            return $"{Name}({rentalToString[Rental]}) {DaysHeld - oldDays + 1} extra days {Price} EUR";
+            return $"{Name}({Rental}) {DaysHeld - oldDays + 1} extra days {Price} EUR";
         }
         public override bool Equals(object o)
         {
@@ -114,6 +83,5 @@ namespace VideoRentalStore
         {
             return HashCode.Combine(Name, DaysRent);
         }
-        #endregion
     }
 }

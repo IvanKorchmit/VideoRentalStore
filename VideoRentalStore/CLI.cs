@@ -86,27 +86,30 @@ namespace VideoRentalStore
 
         private void FillWithFilms()
         {
-            store.AddFilm(new Film("Out of Africa", Film.RentalType.OldFilm));
-            store.AddFilm(new Film("Despicable Me 3", Film.RentalType.NewRelease));
-            store.AddFilm(new Film("Despicable Me", Film.RentalType.RegularRental));
-            store.AddFilm(new Film("Kung Fu Panda 3", Film.RentalType.NewRelease));
-            store.AddFilm(new Film("Matrix 11", Film.RentalType.NewRelease));
-            store.AddFilm(new Film("Black Adam", Film.RentalType.NewRelease));
-            store.AddFilm(new Film("Shrek", Film.RentalType.OldFilm));
-            store.AddFilm(new Film("Spider man", Film.RentalType.RegularRental));
-            store.AddFilm(new Film("Shrek 2", Film.RentalType.RegularRental));
-            store.AddFilm(new Film("Texas Chainsaw Massacre", Film.RentalType.OldFilm));
-            store.AddFilm(new Film("Shrek 3", Film.RentalType.NewRelease));
-            store.AddFilm(new Film("Creed III", Film.RentalType.NewRelease));
-            store.AddFilm(new Film("Halloween Ends", Film.RentalType.NewRelease));
-            store.AddFilm(new Film("Kung Fu Panda 2", Film.RentalType.RegularRental));
-            store.AddFilm(new Film("Ant-Man and the Wasp: Quantumania", Film.RentalType.NewRelease));
-            store.AddFilm(new Film("Enola Holmes 2", Film.RentalType.NewRelease));
-            store.AddFilm(new Film("Saw", Film.RentalType.NewRelease));
-            store.AddFilm(new Film("Nightmare Concert: Cat In The Brain", Film.RentalType.OldFilm));
-            store.AddFilm(new Film("Spider man 2", Film.RentalType.RegularRental));
-            store.AddFilm(new Film("Despicable Me 2", Film.RentalType.RegularRental));
-            store.AddFilm(new Film("Kung Fu Panda", Film.RentalType.OldFilm));
+
+
+
+            store.AddFilm(new Film("Out of Africa", new Old()));
+            store.AddFilm(new Film("Despicable Me 3", new NewRelease()));
+            store.AddFilm(new Film("Despicable Me", new RegularRental()));
+            store.AddFilm(new Film("Kung Fu Panda 3", new NewRelease()));
+            store.AddFilm(new Film("Matrix 11", new NewRelease()));
+            store.AddFilm(new Film("Black Adam", new NewRelease()));
+            store.AddFilm(new Film("Shrek", new Old()));
+            store.AddFilm(new Film("Spider man", new RegularRental()));
+            store.AddFilm(new Film("Shrek 2", new RegularRental()));
+            store.AddFilm(new Film("Texas Chainsaw Massacre", new Old()));
+            store.AddFilm(new Film("Shrek 3", new NewRelease()));
+            store.AddFilm(new Film("Creed III", new NewRelease()));
+            store.AddFilm(new Film("Halloween Ends", new NewRelease()));
+            store.AddFilm(new Film("Kung Fu Panda 2", new RegularRental()));
+            store.AddFilm(new Film("Ant-Man and the Wasp: Quantumania", new NewRelease()));
+            store.AddFilm(new Film("Enola Holmes 2", new NewRelease()));
+            store.AddFilm(new Film("Saw", new NewRelease()));
+            store.AddFilm(new Film("Nightmare Concert: Cat In The Brain", new Old()));
+            store.AddFilm(new Film("Spider man 2", new RegularRental()));
+            store.AddFilm(new Film("Despicable Me 2", new RegularRental()));
+            store.AddFilm(new Film("Kung Fu Panda", new Old()));
         }
     }
 }
