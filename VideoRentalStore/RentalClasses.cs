@@ -10,8 +10,6 @@
         protected const int BASIC_PRICE = 3;
     }
 
-
-
     public class Old : BasicRental 
     {
         private const int OLD_FILM_DAYS = 5;
@@ -37,6 +35,10 @@
         {
             return days <= REGULAR_FILM_DAYS ? BASIC_PRICE : days - REGULAR_FILM_DAYS + days + days - REGULAR_FILM_DAYS;
         }
+        public override string ToString()
+        {
+            return "Regular rental";
+        }
     }
     public class NewRelease : RentalBase
     {
@@ -47,6 +49,10 @@
         public override int CalculatePrice(int days)
         {
             return PREMIUM_PRICE * days;
+        }
+        public override string ToString()
+        {
+            return "New release";
         }
     }
 

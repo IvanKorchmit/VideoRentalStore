@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using static System.Formats.Asn1.AsnWriter;
 
 namespace VideoRentalStore
 {
@@ -86,9 +85,6 @@ namespace VideoRentalStore
 
         private void FillWithFilms()
         {
-
-
-
             store.AddFilm(new Film("Out of Africa", new Old()));
             store.AddFilm(new Film("Despicable Me 3", new NewRelease()));
             store.AddFilm(new Film("Despicable Me", new RegularRental()));

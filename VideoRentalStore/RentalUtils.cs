@@ -120,7 +120,7 @@ namespace VideoRentalStore
                 return;
             }
             f.DaysRent = parsedArgs.days.Value;
-            if ((!isPaidWithBonus && customer.Balance >= f.Price) || (isPaidWithBonus && customer.BonusPoints >= 25 && f.Rental == new NewRelease()))
+            if ((!isPaidWithBonus && customer.Balance >= f.Price) || (isPaidWithBonus && customer.BonusPoints >= 25 && f.Rental is NewRelease))
             {
                 Console.WriteLine($"Added film {f}");
                 if (!isPaidWithBonus)
@@ -143,7 +143,7 @@ namespace VideoRentalStore
             else
             {
                 f.DaysRent = new int();
-                Console.WriteLine(!isPaidWithBonus ? "Not enough money" : f.Rental != new NewRelease() ? "This is not new film." : "Not enough bonus points");
+                Console.WriteLine(!isPaidWithBonus ? "Not enough money" : f.Rental is not NewRelease ? "This is not new film." : "Not enough bonus points");
             }
 
             void AccountFilm(string name)

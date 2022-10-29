@@ -4,16 +4,13 @@ using System.Collections.ObjectModel;
 using System.Linq;
 namespace VideoRentalStore
 {
-    public sealed partial class Inventory
+    public class Inventory
     {
-        // Fields
         private readonly List<Film> stock = new List<Film>();
 
 
-        // Properties
         public ReadOnlyCollection<Film> RentedFilms => stock.AsReadOnly();
 
-        // Methods
         public void AddFilm(Film film) => stock.Add(film);
 
         public Film FindFilm(string name)
@@ -47,7 +44,6 @@ namespace VideoRentalStore
                 film.DaysHeld++;
             }
         }
-
     }
 
 }

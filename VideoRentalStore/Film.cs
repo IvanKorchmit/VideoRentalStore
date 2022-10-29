@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 namespace VideoRentalStore
 {
-
     public partial class Film
     {
         public string Name { get; private set; }
@@ -40,12 +38,8 @@ namespace VideoRentalStore
         public RentalBase Rental { get; set; }
 
 
-        public Film(string name,
-                    RentalBase filmType = null,
-                    int days = 0)
+        public Film(string name, RentalBase filmType = null,int days = 0)
         {
-            // Map RentalType enum to human readable representation
-
             Rental = filmType;
             oldDays = days;
             Name = name;
