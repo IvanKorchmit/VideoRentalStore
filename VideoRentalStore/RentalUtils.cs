@@ -60,37 +60,50 @@ namespace VideoRentalStore
         }
         public static void RentFilm(string input, bool isPaidWithBonus, Inventory store, Inventory backpack, Customer customer)
         {
-            (string filmName, int days, bool isOk) ParseArgs(string input)
+            (string filmName, int? days, bool isOk) ParseArgs(string input)
             {
+
                 string[] splitted = input.Split('"', '"', StringSplitOptions.RemoveEmptyEntries);
+
+
 
                 for (int i = 0; i < splitted.Length; i++)
                 {
                     splitted[i] = splitted[i].Trim();
                 }
+
+
+
                 if (splitted.Length < (!isPaidWithBonus ? 3 : 2))
                 {
                     Console.WriteLine("Error! Command is used wrong");
-                    return (null, 0, false);
+                    return (null, null, false);
                 }
-
+                if (isPaidWithBonus && splitted.Length > 2)
+                {
+                    Console.WriteLine("Error! Command is used wrong");
+                    return (null, null, false);
+                }
                 string filmName = splitted[1];
                 int daysRent = new int();
+
+
+
                 if (!isPaidWithBonus)
                 {
                     string number = splitted[2];
                     if (!int.TryParse(number, out daysRent))
                     {
                         Console.WriteLine("Invalid value");
-                        return (null, 0, false);
+                        return (null, null, false);
                     }
                     if (daysRent <= 0)
                     {
                         Console.WriteLine("Invalid value (Must be greater than 0)");
-                        return (null, 0, false);
+                        return (null, null, false);
                     }
                 }
-                return (filmName, !isPaidWithBonus ? daysRent : 0, true);
+                return (filmName, !isPaidWithBonus ? daysRent : 1, true);
             }
             var parsedArgs = ParseArgs(input);
             if (!parsedArgs.isOk) return;
@@ -106,8 +119,8 @@ namespace VideoRentalStore
                 Console.WriteLine($"Film {parsedArgs.filmName} not found");
                 return;
             }
-            f.DaysRent = parsedArgs.days;
-            if ((!isPaidWithBonus && customer.Balance >= f.Price) || (isPaidWithBonus && customer.BonusPoints >= 25))
+            f.DaysRent = parsedArgs.days.Value;
+            if ((!isPaidWithBonus && customer.Balance >= f.Price) || (isPaidWithBonus && customer.BonusPoints >= 25 && f.Rental == Film.RentalType.NewRelease))
             {
                 Console.WriteLine($"Added film {f}");
                 if (!isPaidWithBonus)
@@ -124,31 +137,43 @@ namespace VideoRentalStore
                     Console.Write($"{bonusFilm} 1 days (Paid with 25 bonus points)" +
                         $"\nTotal price : 0 EUR\n" +
                         $"\nRemaining Bonus points: {customer.BonusPoints}\n");
-                    bonusFilm.DaysRent = 1;
                     AccountFilm(bonusFilm.Name);
                 }
             }
             else
             {
                 f.DaysRent = new int();
-                Console.WriteLine(!isPaidWithBonus ? "Not enough money" : "Not enough bonus points");
+                Console.WriteLine(!isPaidWithBonus ? "Not enough money" : f.Rental != Film.RentalType.NewRelease ? "This is not new film." : "Not enough bonus points");
             }
 
             void AccountFilm(string name)
             {
+
+
                 store.RemoveFIlm(name);
-                backpack.AddFilm(new Film(f.Name, f.Rental, parsedArgs.days));
-                switch (f.Rental)
+                backpack.AddFilm(new Film(f.Name, f.Rental, !isPaidWithBonus ? parsedArgs.days.Value : 1));
+                if (!isPaidWithBonus)
                 {
-                    case Film.RentalType.NewRelease:
-                        customer.BonusPoints += 2;
-                        break;
-                    case Film.RentalType.RegularRental:
-                    case Film.RentalType.OldFilm:
-                        customer.BonusPoints++;
-                        break;
-                    default:
-                        throw new ArgumentException("Invalid rental type"); // Explicit is better than implicit.
+                    switch (f.Rental)
+                    {
+
+
+                        case Film.RentalType.NewRelease:
+                            customer.BonusPoints += 2;
+                            break;
+
+
+                        case Film.RentalType.RegularRental:
+                        case Film.RentalType.OldFilm:
+                            customer.BonusPoints++;
+                            break;
+
+
+                        default:
+                            throw new ArgumentException("Invalid rental type"); // Explicit is better than implicit.
+
+
+                    }
                 }
             }
         }

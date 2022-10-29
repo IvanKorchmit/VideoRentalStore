@@ -44,21 +44,27 @@ namespace VideoRentalStore
             commands = new()
             {
                 { "help", (_) => RentalUtils.PrintHelp() },
-                { "?", (_) => RentalUtils.PrintHelp() },
-                { "store", (_) => store.PrintFilms(false) },
-                { "backpack", (_) => backpack.PrintFilms(true) },
-                { "clear", (_) => 
-                {
-                if (!Console.IsOutputRedirected)
-                        Console.Clear();
 
-                } },
+                { "?", (_) => RentalUtils.PrintHelp() },
+
+                { "store", (_) => store.PrintFilms(false) },
+
+                { "backpack", (_) => backpack.PrintFilms(true) },
+
+                { "clear", (_) =>{if (!Console.IsOutputRedirected)Console.Clear();} },
+
                 { "sleep", (_) => backpack.DayPass() },
+
                 { "add", (input) => RentalUtils.RentFilm(input, false, store, backpack, customer) },
+
                 { "bonuspay", (input) => RentalUtils.RentFilm(input, true, store, backpack, customer) },
+
                 { "return", (input) => RentalUtils.ReturnFIlm(input, backpack, store, customer) },
+
                 { "exit", (_) => exit = true },
+
                 { "work", (_) => customer.Work()},
+
                 { "wallet", (_) => customer.PrintBonusPoints() }
             };
 

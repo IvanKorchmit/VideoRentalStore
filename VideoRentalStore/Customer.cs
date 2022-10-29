@@ -3,12 +3,36 @@ namespace VideoRentalStore
 {
     public sealed class Customer
     {
-        public int BonusPoints { get; set; }
-        public int Balance { get; set; }
+        private int bonusPoints;
+        public int BonusPoints
+        {
+            get
+            {
+                return bonusPoints;
+            }
+            set
+            {
+                bonusPoints = value;
+                bonusPoints = Math.Clamp(bonusPoints, 0, int.MaxValue);
+            }
+        }
+        private int balance;
+        public int Balance
+        {
+            get
+            {
+                return balance;
+            }
+            set
+            {
+                balance = value;
+                balance = Math.Clamp(balance, 0, int.MaxValue);
+            }
+        }
         public Customer()
         {
             Random random = new Random();
-            Balance = random.Next(40, 70);
+            balance = random.Next(40, 70);
         }
 
         public void PrintBonusPoints()
@@ -18,7 +42,7 @@ namespace VideoRentalStore
 
         public void Work()
         {
-            Balance += 5;
+            balance += 5;
         }
     }
 
