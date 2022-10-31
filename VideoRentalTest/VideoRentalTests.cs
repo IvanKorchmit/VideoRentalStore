@@ -1,5 +1,5 @@
 using VideoRentalStore;
-
+using NUnit.Framework;
 
 
 namespace VideoRentalStore.Test
@@ -202,7 +202,7 @@ namespace VideoRentalStore.Test
         }
 
         [Test]
-        public void FIlm_Comparison()
+        public void Film_Comparison()
         {
             Film a = new Film("A");
             Film anotherA = new Film("A");
@@ -213,6 +213,16 @@ namespace VideoRentalStore.Test
             Assert.IsTrue(a != nullFilm);
             Assert.IsTrue(a == anotherA);
         }
+
+        [Test]
+        public void Film_ChangeType()
+        {
+            CLI cli = new CLI();
+
+            cli.Interact("change \"Matrix 11\" old");
+            Assert.That(cli.Store.FindFilm("Matrix 11").Rental is Old);
+        }
+    
     }
 
 }

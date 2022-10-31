@@ -1,10 +1,16 @@
 ﻿namespace VideoRentalStore
 {
+    /// <summary>
+    /// Base class for rentals. Used for price calculation and bonus gain. Good for expanding.
+    /// </summary>
     public abstract class RentalBase
     {
         public abstract int BonusPoint { get; }
         public abstract int CalculatePrice(int days);
     }
+    /// <summary>
+    /// Base class for basic rental. Used for two types like old or regular
+    /// </summary>
     public abstract class BasicRental : RentalBase
     {
         protected const int BASIC_PRICE = 3;
@@ -18,6 +24,7 @@
 
         public override int CalculatePrice(int days)
         {
+            // First 5 days we have BASIC_PRICE but otherwise it will get bigger.
             return days <= OLD_FILM_DAYS ? BASIC_PRICE : days - OLD_FILM_DAYS + days;
         }
         public override string ToString()

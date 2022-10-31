@@ -3,6 +3,9 @@ using System.Collections.Generic;
 
 namespace VideoRentalStore
 {
+    /// <summary>
+    /// Main program logic.
+    /// </summary>
     public class CLI
     {
 
@@ -16,7 +19,7 @@ namespace VideoRentalStore
         public Inventory Backpack => backpack;
         public Customer Customer => customer;
 
-        private const int AMOUNT_OF_COMMANDS = 12; // Used for assertion
+        private const int AMOUNT_OF_COMMANDS = 13; // Used for assertion
 
 
         /// <param name="input">Simulate user input. If the parameter is null, then Console.ReadLine() is called.</param>
@@ -64,10 +67,11 @@ namespace VideoRentalStore
 
                 { "work", (_) => customer.Work()},
 
-                { "wallet", (_) => customer.PrintBonusPoints() }
+                { "wallet", (_) => customer.PrintBonusPoints() },
+                { "change", (input)=> RentalUtils.ChangeFilm(input, store) }
             };
 
-
+            // In case of adding new commands, we need to make sure user won't forget to also document this.
             if (AMOUNT_OF_COMMANDS != commands.Count)
             {
                 throw new Exception($"Commands probably has not been documented in the help section. Current amount of commands are {commands.Count}");
@@ -82,7 +86,9 @@ namespace VideoRentalStore
 
 
         }
-
+        /// <summary>
+        /// Method for store initialization.
+        /// </summary>
         private void FillWithFilms()
         {
             store.AddFilm(new Film("Out of Africa", new Old()));

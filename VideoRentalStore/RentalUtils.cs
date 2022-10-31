@@ -6,16 +6,17 @@ namespace VideoRentalStore
     {
         public static void PrintHelp()
         {
-            Console.WriteLine($"help | ?                print this");
-            Console.WriteLine($"store | backpack        Print one of the inventories");
-            Console.WriteLine($"clear                   Clear terminal");
-            Console.WriteLine($"sleep                   Skip one day");
-            Console.WriteLine($"add \"film name\" <n>   Rent one film for n days");
-            Console.WriteLine($"bonuspay \"film name\"  Rent one film for 1 day with bonus points");
-            Console.WriteLine($"return \"film name\"    Return one film (And pay extra money if returned late)");
-            Console.WriteLine($"exit                    Exit program");
-            Console.WriteLine($"work                    Gain +5 EUR");
-            Console.WriteLine($"wallet                  Display wallet.");
+            Console.WriteLine($"help | ?                                   print this");
+            Console.WriteLine($"store | backpack                           Print one of the inventories");
+            Console.WriteLine($"clear                                      Clear terminal");
+            Console.WriteLine($"sleep                                      Skip one day");
+            Console.WriteLine($"add \"film name\" <n>                      Rent one film for n days");
+            Console.WriteLine($"bonuspay \"film name\"                     Rent one film for 1 day with bonus points");
+            Console.WriteLine($"return \"film name\"                       Return one film (And pay extra money if returned late)");
+            Console.WriteLine($"exit                                       Exit program");
+            Console.WriteLine($"work                                       Gain +5 EUR");
+            Console.WriteLine($"wallet                                     Display wallet.");
+            Console.WriteLine($"change \"film name\" [old, regular, new]   Change film type");
         }
         public static void ReturnFIlm(string input, Inventory backpack, Inventory store, Customer customer)
         {
@@ -158,6 +159,70 @@ namespace VideoRentalStore
                   
                 }
             }
+        }
+        /// <summary>
+        /// Changes film's rental type
+        /// </summary>
+        public static void ChangeFilm(string input, Inventory store)
+        {
+            
+            (string filmName, string type, bool isOk) ParseArgs(string input)
+            {
+
+                string[] splitted = input.Split('"', '"', StringSplitOptions.RemoveEmptyEntries);
+
+
+
+                for (int i = 0; i < splitted.Length; i++)
+                {
+                    splitted[i] = splitted[i].Trim();
+                }
+
+
+
+                if (splitted.Length < 3)
+                {
+                    Console.WriteLine("Error! Command is used wrong");
+                    return (null, null, false);
+                }
+                if (splitted.Length > 3)
+                {
+                    Console.WriteLine("Error! Command is used wrong");
+                    return (null, null, false);
+                }
+                string filmName = splitted[1];
+                string type = splitted[2];
+                return (filmName, type, true);
+            }
+            var parsedArgs = ParseArgs(input);
+
+            if (!parsedArgs.isOk) return;
+
+            var f = store.FindFilm(parsedArgs.filmName);
+
+
+            if (f == null)
+            {
+                Console.WriteLine($"Film {parsedArgs.filmName} not found");
+                return;
+            }
+
+            switch (parsedArgs.type.ToLower())
+            {
+                case "new":
+                    f.Rental = new NewRelease();
+                    break;
+                case "old":
+                    f.Rental = new Old();
+                    break;
+                case "regular":
+                    f.Rental = new RegularRental();
+                    break;
+                default:
+                    Console.WriteLine("Unknown rental type");
+                    break;
+            }
+
         }
     }
 }
