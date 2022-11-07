@@ -43,7 +43,11 @@ namespace VideoRentalStore
 
 
             var f = backpack.FindFilm(parsedArgs.filmName);
-
+            if (f == null)
+            {
+                Console.WriteLine("Film not found");
+                return;
+            }
             if (f.IsLate)
             {
                 if (customer.Balance < f.Price)
@@ -51,12 +55,12 @@ namespace VideoRentalStore
                     Console.WriteLine("Not enough money");
                     return;
                 }
-
-                backpack.RemoveFIlm(f.Name);
-                store.AddFilm(f);
-                f.DaysHeld = 0;
+                customer.Balance -= f.Price;
 
             }
+            backpack.RemoveFIlm(f.Name);
+            store.AddFilm(f);
+            f.DaysHeld = 0;
 
         }
         public static void RentFilm(string input, bool isPaidWithBonus, Inventory store, Inventory backpack, Customer customer)
